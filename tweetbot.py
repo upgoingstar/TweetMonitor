@@ -25,7 +25,7 @@ senderpass = "123shubham"
 #Pick up the arguments.
 parser = optparse.OptionParser()
 parser.add_option('-k', '--keyword', action="store", dest="keyword", help="What do you want to check, sire?", default="spam")
-parser.add_option('-m', '--mail', action="store", dest="mail", help="Give your gmail username/password. eg. email:password", default="spam")
+parser.add_option('-m', '--mail', action="store", dest="mail", help="Give your gmail userid. ", default="spam")
 parser.add_option('-e', '--elastdetails', action="store", dest="elastdetails", help="Details of Elasticsearch instance, eg. ip_address:port", default="spam")
 options, args = parser.parse_args()
 
