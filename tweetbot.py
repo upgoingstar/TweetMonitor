@@ -1,0 +1,88 @@
+from __future__ import absolute_import, print_function
+from tweepy.streaming import StreamListener
+from tweepy import OAuthHandler
+from tweepy import Stream
+import optparse
+import json
+import smtplib
+import sys
+import sqlite3
+from elasticsearch import Elasticsearch
+from datetime import datetime
+
+# Go to http://apps.twitter.com and create an app.
+# The consumer key and secret will be generated for you after
+consumer_key="Enter your Consumer Key here."
+consumer_secret="Enter your Consumer Secret here."
+
+# After the step above, you will be redirected to your app's page.
+# Create an access token under the the "Your access token" section
+access_token="Enter your Access Token here."
+access_token_secret="Enter your Access Token Secret here."
+
+#Go to google settings and enable access for less secure apps
+senderemail = "Enter the email id from which you would like to send mail"
+senderpass = "Password for the same"
+
+#Pick up the arguments.
+parser = optparse.OptionParser()
+parser.add_option('-k', '--keyword', action="store", dest="keyword", help="What do you want to check, sire?", default="spam")
+parser.add_option('-m', '--mail', action="store", dest="mail", help="Give your gmail username/password. eg. email:password", default="spam")
+parser.add_option('-e', '--elastdetails', action="store", dest="elastdetails", help="Details of Elasticsearch instance, eg. ip_address:port", default="spam")
+options, args = parser.parse_args()
+
+#all the major action
+class StdOutListener(StreamListener):
+    """ A listener handles tweets are the received from the stream.
+    This is a basic listener that just prints received tweets to stdout.
+    """
+    def on_data(self, data):
+        list_data = json.loads(data)
+        #print(list_data)
+        tweet = (list_data["text"])
+        username = list_data["user"]["screen_name"]
+        print('>>' + username + ' posted: ' + tweet)
+        msg = "Subject: Twitter Bot for keyword - " + options.keyword.upper() + "\n\nHey Man\nYour Twitter Bot just wanted to send you an update.\n<b>" + username + "</b> just posted a new tweet: \n<i>" + tweet +"</i>"
+        if (options.mail != 'spam'):
+            mailer(msg.encode('utf8'), options.mail)
+        list_data['timestamp'] = datetime.now()
+        if (options.elastdetails != 'spam'):
+            ip = options.elastdetails.split(":")[0]
+            port = options.elastdetails.split(":")[1]
+            dumpToElastic(list_data, ip, port)
+        return True
+
+    def on_error(self, status):
+        print(status)
+
+#Code for searching the Twitter streaming api.
+def search(xyz):
+    l = StdOutListener()
+    auth = OAuthHandler(consumer_key, consumer_secret)
+    auth.set_access_token(access_token, access_token_secret)
+    stream = Stream(auth, l)
+    stream.filter(track=[xyz])
+
+#Code for sending mail.
+def mailer(msg, emailid):
+    try:
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login(senderemail, senderpass)
+        server.sendmail(senderemail, emailid, msg)
+        server.quit()
+        print("[+] Mail sent to concerned authorities.")
+    except:
+        print("[+] I am sorry, Wasn't able to perform my job well. Code for sending the mail got fucked up.")
+
+#Code for dumping the data into ElasticSearch.
+def dumpToElastic(bodydata, ip, port):
+    ES_HOST = {'host': ip, 'port': port}
+    es = Elasticsearch(hosts = [ES_HOST])
+    es.index(index='twitter', doc_type="trial", id = 1, body=bodydata)
+    #print(es['created'])
+
+#Program kicks off.
+print("----- Twitter bot kicked off ------")
+if (options.keyword != 'spam'):
+    search(options.keyword)
