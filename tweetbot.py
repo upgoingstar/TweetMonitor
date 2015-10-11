@@ -19,8 +19,8 @@ access_token="16852719-jFd88Pues05XSygDLmDirIkIx06qwIOFKVsnXClw6"
 access_token_secret="PpDuZrGjF4PY4byiSaJ0pntTpupF5umrQwxfb1TQPWy3q"
 
 #Go to google settings and enable access for less secure apps
-senderemail = "upgoingstaaar@gmail.com"
-senderpass = "123shubham"
+senderemail = "Your gmail account username"
+senderpass = "Password for the same"
 
 #Pick up the arguments.
 parser = optparse.OptionParser()
