@@ -5,9 +5,9 @@ Ever wondered if you would like to keep an eye on a specific keyword on twitter,
 
 Congrats, you have landed safely at the right spot. 
 
-This program lets you define a specific keyword and allows you to:
-1. see the updates on console itself.
-2. Send an email to a specific email id.
+This program lets you define a specific keyword and allows you to: <br>
+1. see the updates on console itself.<br>
+2. Send an email to a specific email id.<br>
 3. Dump the data into elasticsearch.
 
 ## Usage: tweepyStreaming.py [options]
