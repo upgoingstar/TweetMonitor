@@ -6,23 +6,21 @@ import optparse
 import json
 import smtplib
 import sys
-import sqlite3
 from elasticsearch import Elasticsearch
 from datetime import datetime
+import re
 
-# Go to http://apps.twitter.com and create an app.
-# The consumer key and secret will be generated for you after
-consumer_key="Enter your Consumer Key here."
-consumer_secret="Enter your Consumer Secret here."
+consumer_key="P0RTduLx45x0xQOaFL7N50NYX"
+consumer_secret="k6GhrA21iPV0yZIEyx7g8XFQfzMFsaANJZB9HqQRAiubuNZ6LA"
 
 # After the step above, you will be redirected to your app's page.
 # Create an access token under the the "Your access token" section
-access_token="Enter your Access Token here."
-access_token_secret="Enter your Access Token Secret here."
+access_token="16852719-jFd88Pues05XSygDLmDirIkIx06qwIOFKVsnXClw6"
+access_token_secret="PpDuZrGjF4PY4byiSaJ0pntTpupF5umrQwxfb1TQPWy3q"
 
 #Go to google settings and enable access for less secure apps
-senderemail = "Enter the email id from which you would like to send mail"
-senderpass = "Password for the same"
+senderemail = "upgoingstaaar@gmail.com"
+senderpass = "123shubham"
 
 #Pick up the arguments.
 parser = optparse.OptionParser()
@@ -44,7 +42,12 @@ class StdOutListener(StreamListener):
         print('>>' + username + ' posted: ' + tweet)
         msg = "Subject: Twitter Bot for keyword - " + options.keyword.upper() + "\n\nHey Man\nYour Twitter Bot just wanted to send you an update.\n<b>" + username + "</b> just posted a new tweet: \n<i>" + tweet +"</i>"
         if (options.mail != 'spam'):
-            mailer(msg.encode('utf8'), options.mail)
+            p = re.compile("^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,9})$")
+            m = p.match(options.mail)
+            if m:
+                mailer(msg.encode('utf8'), options.mail)
+            else:
+                print('Email ID is wrong. Please enter valid one.')
         list_data['timestamp'] = datetime.now()
         if (options.elastdetails != 'spam'):
             ip = options.elastdetails.split(":")[0]
