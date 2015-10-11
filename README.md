@@ -12,13 +12,11 @@ This program lets you define a specific keyword and allows you to:
 
 ## Usage: tweepyStreaming.py [options]
 
-Options:
-  -h, --help            show this help message and exit
-  -k KEYWORD, --keyword=KEYWORD
-                        What do you want to check, sire?
-  -m MAIL, --mail=MAIL  Give your gmail emaild. 
-  -e ELASTDETAILS, --elastdetails=ELASTDETAILS
-                        Details of Elasticsearch instance, eg. ip_address:port
+Options: <br>
+  -h, --help <i>[show this help message and exit]</i><br>
+  -k KEYWORD, --keyword=KEYWORD <i>[What do you want to check, sire?]</i><br>
+  -m MAIL, --mail=MAIL <i>[Give your gmail emaild.]</i> <br>
+  -e ELASTDETAILS, --elastdetails=ELASTDETAILS <i>[Details of Elasticsearch instance, eg. ip_address:port]</i><br>
 
 ## Dependencies:
 Tweepy library [https://github.com/tweepy/tweepy]<br>
