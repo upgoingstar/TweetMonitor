@@ -31,9 +31,6 @@ options, args = parser.parse_args()
 
 #all the major action
 class StdOutListener(StreamListener):
-    """ A listener handles tweets are the received from the stream.
-    This is a basic listener that just prints received tweets to stdout.
-    """
     def on_data(self, data):
         list_data = json.loads(data)
         #print(list_data)
