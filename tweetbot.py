@@ -9,18 +9,21 @@ import sys
 from elasticsearch import Elasticsearch
 from datetime import datetime
 import re
+import random
 
-consumer_key="P0RTduLx45x0xQOaFL7N50NYX"
-consumer_secret="k6GhrA21iPV0yZIEyx7g8XFQfzMFsaANJZB9HqQRAiubuNZ6LA"
+
+# Go to http://apps.twitter.com and create an app.
+# The consumer key and secret will be generated for you after
+consumer_key="Enter your Consumer Key here."
+consumer_secret="Enter your Consumer Secret here."
 
 # After the step above, you will be redirected to your app's page.
 # Create an access token under the the "Your access token" section
-access_token="16852719-jFd88Pues05XSygDLmDirIkIx06qwIOFKVsnXClw6"
-access_token_secret="PpDuZrGjF4PY4byiSaJ0pntTpupF5umrQwxfb1TQPWy3q"
+access_token="Enter your Access Token here."
+access_token_secret="Enter your Access Token Secret here."
 
 #Go to google settings and enable access for less secure apps
 senderemail = "Your gmail account username"
-senderpass = "Password for the same"
 
 #Pick up the arguments.
 parser = optparse.OptionParser()
@@ -31,6 +34,9 @@ options, args = parser.parse_args()
 
 #all the major action
 class StdOutListener(StreamListener):
+    """ A listener handles tweets are the received from the stream.
+    This is a basic listener that just prints received tweets to stdout.
+    """
     def on_data(self, data):
         list_data = json.loads(data)
         #print(list_data)
@@ -79,7 +85,7 @@ def mailer(msg, emailid):
 def dumpToElastic(bodydata, ip, port):
     ES_HOST = {'host': ip, 'port': port}
     es = Elasticsearch(hosts = [ES_HOST])
-    es.index(index='twitter', doc_type="trial", id = 1, body=bodydata)
+    es.index(index='twitter', doc_type="trial", id= random.random(), body=bodydata)
     #print(es['created'])
 
 #Program kicks off.
